@@ -18,6 +18,9 @@
 {% endblock %}
 {% block content %}{% endblock %}
 {% block footer %}{% endblock %}
+{% block about %}
+    {% include 'about.html' %}
+{% endblock %}
 {% block modal %}
     {% include 'modal.html' %}
 {% endblock %}
@@ -25,6 +28,7 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
     {% include 'ga.html' %}
+    {% include 'about_script.html' %}
     {% include 'modal_script.html' %}
 {% endblock %}
 {% block extra_bodies %}{% endblock %}
