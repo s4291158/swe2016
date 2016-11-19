@@ -7,5 +7,101 @@
 
 {% block content %}
     <div id="landing-1">
+        <div class="container">
+            <div class="row">
+                <div id="landing-1-1" class="col s12 m6">
+                    <h1>Stay open minded.</h1>
+                    <h2>To ensure our collective intelligence remain nuance.</h2>
+                </div>
+                <div id="landing-1-2" class="col s12 m4 offset-m2">
+                    <div class="row">
+                        <form id="interest-form" class="col s12">
+                            <div class="card-panel hoverable">
+                                <h4>Interest form</h4>
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input type="text" class="validate" required
+                                               id="interest-name" name="name"
+                                               placeholder="Bruce Wayne">
+                                        <label for="interest-name">Your Name</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input type="text" class="validate" required
+                                               id="interest-email" name="email"
+                                               placeholder="bruce@wayne.enterprises">
+                                        <label for="interest-email">Your Email</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                    <textarea class="validate materialize-textarea"
+                                              id="interest-feedback" name="feedback"
+                                              placeholder="Harvey Dent, can we trust him?"></textarea>
+                                        <label for="interest-feedback">Optional feedback</label>
+                                    </div>
+                                </div>
+                                <div id="interest-form-message-container" class="" style="display: none">
+                                    <div class="card-panel hoverable">
+                                        <div id="interest-form-message">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn waves-effect waves-light blue lighten-2" type="submit" name="action">
+                                    register interest
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+{% endblock %}
+
+{% block extra_bodies %}
+    <script>
+
+        $("#interest-form").submit(function (event) {
+            event.preventDefault();
+            var message_container = $('#interest-form-message-container');
+            var message_card = message_container.find('.card-panel');
+            var message_ele = $('#interest-form-message');
+            $.ajax({
+                type: 'post',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response['success']) {
+                        message_container.show();
+                        message_card.css('border', '1px solid #4CAF50');
+                        message_card.css('color', 'rgba(0,0,0,0.87)');
+                        message_ele.html(
+                                '<p>All done, thank you for supporting!</p>'
+                        );
+                    } else {
+                        var error;
+                        for (error in response['errors']) {
+                            var field = $('#interest-' + error);
+                            var label = $('label[for="' + field.attr('id') + '"]');
+                            var error_message = response['errors'][error];
+                            label.attr('data-error', error_message);
+                            field.addClass('invalid');
+                        }
+                    }
+                },
+                error: function () {
+                    message_container.show();
+                    message_card.css('border', '1px solid #F44336');
+                    message_card.css('color', '#F44336');
+                    message_ele.html(
+                            '<p>Unexpected server error!</p>'
+                    );
+                }
+            });
+        });
+    </script>
 {% endblock %}
