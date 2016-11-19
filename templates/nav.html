@@ -1,27 +1,32 @@
 <nav class="z-depth-3">
     <div class="nav-wrapper">
-        <a href="#" class="brand-logo center">Overstand</a>
+        <a href="{% url 'landing' %}" class="brand-logo center">Overstand</a>
         <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-        <ul class="left hide-on-med-and-down">
-            <li><a href="#"><i class="material-icons">menu</i></a></li>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="{% url 'topic' 1 %}">Topic</a></li>
+            <li><a href="{% url 'landing' %}">Interest</a></li>
+            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=True %}>
+                <a href="#login-modal">Login</a>
+            </li>
+            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=True %}>
+                <a href="#register-modal">Register</a>
+            </li>
+            <li class="logged-in" {% include 'auth_toggle.html' with logged_in=False %}>
+                <a id="logout-button1" href="#">Logout</a>
+            </li>
         </ul>
-        <ul id="nav-mobile" class="right hide-on-med-and-down logged-out"
-                {% include 'auth_toggle.html' with logged_in=False %}>
-            <li><a href="#login-modal">Login</a></li>
-            <li><a href="#register-modal">Register</a></li>
-        </ul>
-        <ul id="mobile-demo" class="side-nav logged-out"
-                {% include 'auth_toggle.html' with logged_in=False %}>
-            <li><a href="#login-modal">Login</a></li>
-            <li><a href="#register-modal">Register</a></li>
-        </ul>
-        <ul id="nav-mobile" class="right hide-on-med-and-down logged-in"
-                {% include 'auth_toggle.html' with logged_in=True %}>
-            <li><a id="logout-button1" href="#">Logout</a></li>
-        </ul>
-        <ul id="mobile-demo" class="side-nav logged-in"
-                {% include 'auth_toggle.html' with logged_in=True %}>>
-            <li><a id="logout-button2" href="#">Login</a></li>
+        <ul id="mobile-demo" class="side-nav">
+            <li><a href="{% url 'topic' 1 %}">Topic</a></li>
+            <li><a href="{% url 'landing' %}">Interest</a></li>
+            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=True %}>
+                <a href="#login-modal">Login</a>
+            </li>
+            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=True %}>
+                <a href="#register-modal">Register</a>
+            </li>
+            <li class="logged-in" {% include 'auth_toggle.html' with logged_in=False %}>
+                <a id="logout-button2" href="#">Logout</a>
+            </li>
         </ul>
     </div>
 </nav>

@@ -4,19 +4,19 @@
 {% block title %}{{ topic.title }}{% endblock %}
 
 {% block extra_heads %}
-    <!-- your css here -->
     <link type="text/css" rel="stylesheet" href="{% static 'css/topic.css' %}">
 {% endblock %}
 
 
 {% block content %}
-    <!-- your content here -->
-
     <div id="topic-main">
         <div class="container">
             <div class="row">
-                <div class="topic-bar card-panel">
-                    <h2 class="brand-logo center valign">{{ topic.title }}</h2>
+                <div class="col s12">
+                    <div class="card-panel hoverable">
+                        <h4 class="center">{{ topic.title }}</h4>
+                        <p class="center">{{ topic.description }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,7 +58,6 @@
 
         <!-- Horizontal Separation Section For > 440px Screen Width -->
         <div id="horizontal-columns" class="container">
-            <!-- Opinion Types -->
             <div class="row" style="margin-bottom: 0;">
                 <div class="col s6">
                     <div class="card">
@@ -82,10 +81,6 @@
             </div>
 
             <div class="row">
-
-                <!-- Left column -->
-
-
                 {% for side in topic.side_set.all %}
                     <div class="col s6">
                         {% for opinion in side.opinion_set.all %}
@@ -111,7 +106,6 @@
         </div>
     </div>
 
-    <!-- Modal Structure -->
     <div id="modal1" class="modal">
         <div class="modal-content">
             <h4>Modal Header</h4>

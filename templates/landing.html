@@ -3,7 +3,6 @@
 {% block extra_heads %}
     <link type="text/css" rel="stylesheet" href="{% static 'css/landing.css' %}">
 {% endblock %}
-{% block nav %}{% endblock %}
 
 {% block content %}
     <div id="landing-1">
@@ -65,7 +64,6 @@
 
 {% block extra_bodies %}
     <script>
-
         $("#interest-form").submit(function (event) {
             event.preventDefault();
             var message_container = $('#interest-form-message-container');
