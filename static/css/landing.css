@@ -1,4 +1,5 @@
 #landing-1 {
+  background: linear-gradient(50deg, HSLA(205, 100%, 80%, 1), white);
   padding: 10% 0;
   height: 100vh; }
   @media only screen and (min-width: 601px) {
