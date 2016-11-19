@@ -4,12 +4,15 @@
   padding: 10% 0;
   height: 100vh;
   #landing-1-1 {
+    @media #{$medium-and-up} {
+      text-align: right;
+    }
     h2 {
       color: grey;
     }
   }
   .card-panel:first-of-type {
-    padding:40px;
+    padding: 40px;
   }
   #interest-form-message-container {
     margin: 15px 0;
