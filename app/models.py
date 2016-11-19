@@ -23,9 +23,16 @@ class Topic(StrMixin, models.Model):
     last_edit = models.DateTimeField(auto_now=True)
 
 
-class Opinion(StrMixin, models.Model):
+class Side(StrMixin, models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
+    title = models.CharField(max_length=128)
+
+
+class Opinion(StrMixin, models.Model):
+    side = models.ForeignKey(Side, on_delete=models.CASCADE)
+
     content = models.CharField(max_length=250)
+    likes = models.IntegerField(default=0)
     when = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)
