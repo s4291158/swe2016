@@ -6354,5 +6354,12 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
 @media (min-height: 40.125em) {
   .picker--time .picker__box {
     margin-bottom: 5em; } }
+.modal > .container {
+  margin: 30px auto; }
+
+.message-container {
+  margin: 15px 0; }
+  .message-container p {
+    margin-top: 0; }
 
 /*# sourceMappingURL=styles.css.map */

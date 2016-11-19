@@ -1,29 +1,33 @@
 <script>
-    $("#login-form").submit(function (event) {
-        event.preventDefault();
-        var message_container = $('#login-form-message-container');
+    $("#{{ mode }}-form").submit(function (event) {
+        var message_container = $('#{{ mode }}-form-message-container');
         var message_card = message_container.find('.card-panel');
-        var message_ele = $('#login-form-message');
+        var message_ele = $('#{{ mode }}-form-message');
+        event.preventDefault();
         $.ajax({
             type: 'post',
             url: $(this).attr('action'),
             data: $(this).serialize(),
             success: function (response) {
                 if (response['success']) {
-                    message_container.show();
-                    message_card.css('border', '1px solid #4CAF50');
-                    message_card.css('color', 'rgba(0,0,0,0.87)');
-                    message_ele.html(
-                            '<p>Logging in...</p>'
-                    );
+                    $('#{{ mode }}-modal').modal('close');
+                    logged_in();
                 } else {
-                    var error;
-                    for (error in response['errors']) {
-                        var field = $('#login-' + error);
-                        var label = $('label[for="' + field.attr('id') + '"]');
-                        var error_message = response['errors'][error];
-                        label.attr('data-error', error_message);
-                        field.addClass('invalid');
+                    var non_field_error = response['errors']['__all__'];
+                    if (non_field_error) {
+                        message_container.show();
+                        message_card.css('border', '1px solid #F44336');
+                        message_card.css('color', '#F44336');
+                        message_ele.html('<p>' + non_field_error + '</p>');
+                    } else {
+                        var error;
+                        for (error in response['errors']) {
+                            var field = $('#{{ mode }}-' + error);
+                            var label = $('label[for="' + field.attr('id') + '"]');
+                            var error_message = response['errors'][error];
+                            label.attr('data-error', error_message);
+                            field.addClass('invalid');
+                        }
                     }
                 }
             },
@@ -31,53 +35,46 @@
                 message_container.show();
                 message_card.css('border', '1px solid #F44336');
                 message_card.css('color', '#F44336');
-                message_ele.html(
-                        '<p>Unexpected server error!</p>'
-                );
+                message_ele.html('<p>Unexpected server error! Try refresh.</p>');
             }
         });
     });
-
-    $("#register-form").submit(function (event) {
+    $('#logout-button1').click(function (event) {
+        log_out(event)
+    });
+    $('#logout-button2').click(function (event) {
+        log_out(event)
+    });
+    var logged_out_navs = $('.logged-out');
+    var logged_in_navs = $('.logged-in');
+    function log_out(event) {
         event.preventDefault();
-        var message_container = $('#register-form-message-container');
-        var message_card = message_container.find('.card-panel');
-        var message_ele = $('#register-form-message');
         $.ajax({
-            type: 'post',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function (response) {
-                if (response['success']) {
-                    message_container.show();
-                    message_card.css('border', '1px solid #4CAF50');
-                    message_card.css('color', 'rgba(0,0,0,0.87)');
-                    message_ele.html(
-                            '<p>Registration successful. Redirecting...</p>'
-                    );
-                } else {
-                    var error;
-                    for (error in response['errors']) {
-                        var field = $('#register-' + error);
-                        var label = $('label[for="' + field.attr('id') + '"]');
-                        var error_message = response['errors'][error];
-                        label.attr('data-error', error_message);
-                        field.addClass('invalid');
-                    }
-                }
-            },
-            error: function () {
-                message_container.show();
-                message_card.css('border', '1px solid #F44336');
-                message_card.css('color', '#F44336');
-                message_ele.html(
-                        '<p>Unexpected server error!</p>'
-                );
+            url: '{% url 'logout' %}',
+            data: {},
+            type: "post",
+            success: function () {
+                logged_out()
             }
         });
-    });
-
-    $(document).ready(function(){
-        $('#login-modal').modal();
+    }
+    function logged_in() {
+        logged_in_navs.each(function () {
+            $(this).show();
+        });
+        logged_out_navs.each(function () {
+            $(this).hide();
+        })
+    }
+    function logged_out() {
+        logged_in_navs.each(function () {
+            $(this).hide();
+        });
+        logged_out_navs.each(function () {
+            $(this).show();
+        })
+    }
+    $(document).ready(function () {
+        $('#{{ mode }}-modal').modal();
     });
 </script>
