@@ -5,3 +5,8 @@ from django.views import View
 class IndexView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'index.html', {})
+
+
+class LandingView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'landing.html', {})
