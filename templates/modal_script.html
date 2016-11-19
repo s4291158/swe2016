@@ -1,0 +1,83 @@
+<script>
+    $("#login-form").submit(function (event) {
+        event.preventDefault();
+        var message_container = $('#login-form-message-container');
+        var message_card = message_container.find('.card-panel');
+        var message_ele = $('#login-form-message');
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response['success']) {
+                    message_container.show();
+                    message_card.css('border', '1px solid #4CAF50');
+                    message_card.css('color', 'rgba(0,0,0,0.87)');
+                    message_ele.html(
+                            '<p>Logging in...</p>'
+                    );
+                } else {
+                    var error;
+                    for (error in response['errors']) {
+                        var field = $('#login-' + error);
+                        var label = $('label[for="' + field.attr('id') + '"]');
+                        var error_message = response['errors'][error];
+                        label.attr('data-error', error_message);
+                        field.addClass('invalid');
+                    }
+                }
+            },
+            error: function () {
+                message_container.show();
+                message_card.css('border', '1px solid #F44336');
+                message_card.css('color', '#F44336');
+                message_ele.html(
+                        '<p>Unexpected server error!</p>'
+                );
+            }
+        });
+    });
+
+    $("#register-form").submit(function (event) {
+        event.preventDefault();
+        var message_container = $('#register-form-message-container');
+        var message_card = message_container.find('.card-panel');
+        var message_ele = $('#register-form-message');
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response['success']) {
+                    message_container.show();
+                    message_card.css('border', '1px solid #4CAF50');
+                    message_card.css('color', 'rgba(0,0,0,0.87)');
+                    message_ele.html(
+                            '<p>Registration successful. Redirecting...</p>'
+                    );
+                } else {
+                    var error;
+                    for (error in response['errors']) {
+                        var field = $('#register-' + error);
+                        var label = $('label[for="' + field.attr('id') + '"]');
+                        var error_message = response['errors'][error];
+                        label.attr('data-error', error_message);
+                        field.addClass('invalid');
+                    }
+                }
+            },
+            error: function () {
+                message_container.show();
+                message_card.css('border', '1px solid #F44336');
+                message_card.css('color', '#F44336');
+                message_ele.html(
+                        '<p>Unexpected server error!</p>'
+                );
+            }
+        });
+    });
+
+    $(document).ready(function(){
+        $('#login-modal').modal();
+    });
+</script>
