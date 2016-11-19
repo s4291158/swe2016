@@ -4,6 +4,9 @@
   background: linear-gradient(50deg, HSLA(205, 100%, 80%, 1), white);
   padding: 10% 0;
   height: 100vh;
+  @media #{$small-and-down} {
+    height: 200vh;
+  }
   #landing-1-1 {
     @media #{$medium-and-up} {
       text-align: right;
