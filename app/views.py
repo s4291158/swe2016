@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views import View
 from .forms import InterestForm
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
+from .models import Topic
 
 
 class IndexView(View):
@@ -25,3 +26,15 @@ class LandingView(View):
         else:
             context['errors'] = form.errors
         return JsonResponse(context)
+
+
+class TopicView(View):
+    def get(self, request, *args, **kwargs):
+        context = {}
+        topic_id = kwargs['topic_id']
+        try:
+            topic = Topic.objects.get(id=topic_id)
+        except Topic.DoesNotExist:
+            return Http404()
+        context['topic'] = topic
+        return render(request, 'topic.html', context)
