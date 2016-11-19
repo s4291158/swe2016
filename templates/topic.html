@@ -5,14 +5,160 @@
 
 {% block extra_heads %}
     <!-- your css here -->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/topic.css' %}">
 {% endblock %}
 
 {% block nav %}{% endblock %}
 
 {% block content %}
     <!-- your content here -->
+
+    <div id="topic-main">
+
+        <div id="vertical-columns" class="container">
+          <div class="row">
+            <div class="topic-bar card-panel hoverable">
+                <h2 class="brand-logo center valign">{{ topic.title }}</h2>
+            </div>
+          </div>
+
+          <ul class="collapsible" data-collapsible="accordion">
+             <li>
+               <div class="collapsible-header green accent-3 white-text">FOR</div>
+               <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+             </li>
+           </ul>
+
+           <ul class="collapsible" data-collapsible="accordion">
+              <li>
+                <div class="collapsible-header red darker-1 white-text">AGAINST</div>
+                <div class="collapsible-body">
+                  {% for opinion in topic.opinion_set.all %}
+
+                  <div class="row">
+                    <div class="col s12">
+                      <div class="card blue-grey darken-1">
+                        <div class="card-content white-text opinion-card" style="padding: 0;">
+                          <p class="opinion-content"> {{ opinion.content }}</p>
+                        </div>
+                        <div class="card-action opinion-toolbar">
+                          <a href="#"><i class="material-icons opinion-icon">thumb_up</i> <span>16</span> </a>
+                          <a href="#"><i class="material-icons opinion-icon">add_box</i></a>
+                          <a href="#"><i class="material-icons opinion-icon">chat</i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {% endfor %}
+                </div>
+              </li>
+            </ul>
+        </div>
+
+        <!-- Horizontal Separation Section For > 440px Screen Width -->
+        <div id="horizontal-columns" class="container">
+            <div class="row">
+              <div class="topic-bar card-panel hoverable">
+                  <h2 class="brand-logo center valign">{{ topic.title }}</h2>
+              </div>
+            </div>
+
+            <!-- Opinion Types -->
+            <div class="row" style="margin-bottom: 0;">
+              <div class="col s6">
+                <div class="card">
+                  <div class="card-content green accent-3">
+                    <span class="card-content opinion-title white-text">FOR
+                      <a href="#modal1"><i class="material-icons right white-text modal-icon">add</i></a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col s6">
+                <div class="card">
+                  <div class="card-content red darken-1">
+                    <span class="card-content opinion-title white-text">AGAINST
+                      <a href="#modal1"><i class="material-icons right white-text modal-icon">add</i></a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+
+              <!-- Left column -->
+
+              <div class="col s6">
+              {% for opinion in topic.opinion_set.all %}
+
+                  <div class="row">
+                    <div class="col s12">
+                      <div class="card blue-grey darken-1">
+                        <div class="card-content white-text opinion-card" style="padding: 40px;">
+                          <p class="opinion-content"> {{ opinion.content }}</p>
+                        </div>
+                        <div class="card-action opinion-toolbar">
+                          <a href="#"><i class="material-icons opinion-icon">thumb_up</i> <span>16</span> </a>
+                          <a href="#"><i class="material-icons opinion-icon">add_box</i></a>
+                          <a href="#"><i class="material-icons opinion-icon">chat</i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+              {% endfor %}
+              </div>
+
+              <!-- Right column -->
+
+              <div class="col s6">
+              {% for opinion in topic.opinion_set.all %}
+
+                  <div class="row">
+                    <div class="col s12">
+                      <div class="card blue-grey darken-1">
+                        <div class="card-content white-text opinion-card" style="padding: 40px;">
+                          <p class="opinion-content"> {{ opinion.content }} </p>
+                        </div>
+                        <div class="card-action opinion-toolbar">
+                          <a href="#"><i class="material-icons opinion-icon">thumb_up</i> <span>16</span> </a>
+                          <a href="#"><i class="material-icons opinion-icon">add_box</i></a>
+                          <a href="#"><i class="material-icons opinion-icon">chat</i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+              {% endfor %}
+              </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Structure -->
+     <div id="modal1" class="modal">
+       <div class="modal-content">
+         <h4>Modal Header</h4>
+         <p>A bunch of text</p>
+       </div>
+       <div class="modal-footer">
+         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+       </div>
+     </div>
+
 {% endblock %}
 
 {% block extra_bodies %}
-    <!-- add your javascript here -->
+    <!-- Modal plugin init -->
+    <script>
+    $(document).ready(function(){
+      $('.modal').modal();
+      $('.collapsible').collapsible();
+    });
+    </script>
+
 {% endblock %}
