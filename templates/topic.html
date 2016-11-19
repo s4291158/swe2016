@@ -20,80 +20,57 @@
                 </div>
             </div>
         </div>
-        <div id="vertical-columns" class="container">
-            <ul class="collapsible" data-collapsible="accordion">
-                <li>
-                    <div class="collapsible-header green accent-3 white-text">FOR</div>
-                    <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-                </li>
-            </ul>
-
-            <ul class="collapsible" data-collapsible="accordion">
-                <li>
-                    <div class="collapsible-header red darker-1 white-text">AGAINST</div>
-                    <div class="collapsible-body">
-                        {% for opinion in topic.opinion_set.all %}
-
-                            <div class="row">
-                                <div class="col s12">
-                                    <div class="card blue-grey darken-1">
-                                        <div class="card-content white-text opinion-card" style="padding: 0;">
-                                            <p class="opinion-content"> {{ opinion.content }}</p>
-                                        </div>
-                                        <div class="card-action opinion-toolbar">
-                                            <a href="#"><i class="material-icons opinion-icon">thumb_up</i>
-                                                <span>16</span> </a>
-                                            <a href="#"><i class="material-icons opinion-icon">add_box</i></a>
-                                            <a href="#"><i class="material-icons opinion-icon">chat</i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        {% endfor %}
-                    </div>
-                </li>
-            </ul>
-        </div>
 
         <!-- Horizontal Separation Section For > 440px Screen Width -->
         <div id="horizontal-columns" class="container">
             <div class="row">
-                {% for side in topic.side_set.all %}
-                    <div class="col s6 columns">
+                {% for side in topic.side_set %}
+                    <div class="col m6 s12 columns">
                         <div class="row">
                             <div class="col s12">
-                                <div class="card-panel hoverable sides">
-                                    <span>{{ side.title }}<a class="add-opinion-button" href="#opinion-modal"
-                                                             data-side-id="{{ side.id }}">
+                                <p class="showing">showing: {{ side.showing }}</p>
+                                <div class="card-panel hoverable side-card"
+                                     data-side-id="{{ side.id }}"
+                                     data-open="false">
+                                    <span>{{ side.title }}</span>
+                                    <a class="add-opinion-button" href="#opinion-modal"
+                                       data-side-id="{{ side.id }}">
                                         <i class="material-icons right">add</i>
-                                    </a></span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                        {% for opinion in side.opinion_set.all %}
-                            <div class="row">
-                                <div class="col s12">
-                                    <div class="card-panel hoverable opinions">
-                                        <div class="card-content white-text opinion-card" style="padding: 40px;">
-                                            <p class="opinion-content"> {{ opinion.content }}</p>
-                                        </div>
-                                        <div class="card-action opinion-toolbar">
-                                            <a href="#"><i class="material-icons opinion-icon">thumb_up</i>
-                                                <span>{{ opinion.likes }}</span> </a>
-                                            <a href="#"><i class="material-icons opinion-icon">add_box</i></a>
-                                            <a href="#"><i class="material-icons opinion-icon">chat</i></a>
+                        <div id="opinion-set-{{ side.id }}" class="opinion-set">
+                            {% for opinion in side.opinion_set %}
+                                <div class="row">
+                                    <div class="col s12">
+                                        <div class="card-panel hoverable opinions">
+                                            <div class="card-content white-text opinion-card" style="padding: 40px;">
+                                                <p class="opinion-content"> {{ opinion.content }}</p>
+                                            </div>
+                                            <div class="card-action opinion-toolbar">
+                                                <a data-opinion-id="{{ opinion.id }}" class="like-button
+                                               {% if opinion.id in request.session.liked_opinions %}liked{% endif %}"
+                                                   href="#">
+                                                    <i class="material-icons opinion-icon">thumb_up</i>
+                                                    <span>{{ opinion.likes }}</span>
+                                                </a>
+                                                <a href="#"><i class="material-icons opinion-icon">add_box</i></a>
+                                                <a href="#"><i class="material-icons opinion-icon">chat</i></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
                 {% endfor %}
             </div>
         </div>
     </div>
-
+    <form id="like-form" action="{% url 'like' %}">
+        <input id="like-opinion_id" name="opinion_id" type="hidden">
+    </form>
     <div id="opinion-modal" class="modal">
         <div class="modal-content">
             <div class="container">
@@ -138,6 +115,38 @@
             $('#opinion-side').val($(this).attr('data-side-id'));
             $('#opinion-user').val(window.user_id);
         });
+        $('.side-card').click(function (event) {
+            event.preventDefault();
+            var card = $(this);
+            if (card.attr('data-open') == "false") {
+                $('#opinion-set-' + card.attr('data-side-id')).slideDown();
+                card.attr('data-open', "true")
+            } else if (card.attr('data-open') == "true") {
+                $('#opinion-set-' + card.attr('data-side-id')).slideUp();
+                card.attr('data-open', "false")
+            }
+        });
+        $('.like-button').click(function (event) {
+            event.preventDefault();
+            $('#like-opinion_id').val($(this).attr('data-opinion-id'));
+            var form = $('#like-form');
+            var btn = $(this);
+            $.ajax({
+                type: 'post',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function (response) {
+                    if (response['success']) {
+                        if (response['liked']) {
+                            btn.addClass('liked');
+                        } else {
+                            btn.removeClass('liked');
+                        }
+                        btn.find('span').text(response['likes']);
+                    }
+                }
+            });
+        });
         $("#opinion-form").submit(function (event) {
             event.preventDefault();
             var form = $(this);
@@ -147,11 +156,11 @@
                 data: $(this).serialize(),
                 success: function (response) {
                     if (response['success']) {
-                        window.success_message(form, 'Opinion received. Thank you!');
+                        window.success_message(form, 'Success!');
                         setTimeout(function () {
                             $('#opinion-modal').modal('close');
                             window.hide_message_container(form);
-                        }, 500);
+                        }, 800);
                     } else {
                         window.apply_errors(response, 'opinion')
                     }

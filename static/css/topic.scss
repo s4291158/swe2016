@@ -1,0 +1,60 @@
+#topic-main {
+  background: linear-gradient(50deg, HSLA(205, 100%, 90%, 1), white);
+  background-size: cover;
+  padding-top: 2%;
+  min-height: 100vh;
+  .opinion-set {
+    display: block
+  }
+  .mobile-only {
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    .opinion-set {
+      display: none;
+    }
+    .mobile-only {
+      display: block;
+      margin-top: -0.7em;
+    }
+  }
+
+}
+
+.columns > .row {
+  margin-bottom: 30px !important;
+}
+
+.columns .row {
+  margin-bottom: 0;
+}
+
+.showing {
+  margin-bottom: -0.7em;
+  font-size: 12px;
+}
+
+.opinions {
+  padding: 0;
+  p {
+    color: rgba(0, 0, 0, 0.85)
+  }
+  .opinion-card {
+    padding: 1px 20px !important;
+  }
+  .opinion-toolbar {
+    padding: 5px 30px !important;
+    font-size: 12px;
+    .opinion-icon, > * {
+      color: grey;
+    }
+    .liked * {
+      color: #039be5
+    }
+  }
+}
+
+.opinion-content {
+  word-wrap: break-word;
+}

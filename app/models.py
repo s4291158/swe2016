@@ -34,6 +34,7 @@ class Opinion(StrMixin, models.Model):
     side = models.ForeignKey(Side, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
 
+    valid = models.BooleanField(default=False)
     content = models.CharField(max_length=250, unique=True)
     likes = models.IntegerField(default=0)
     when = models.DateTimeField(auto_now_add=True)
