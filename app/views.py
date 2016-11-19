@@ -1,8 +1,18 @@
 from django.shortcuts import render
 from django.views import View
 from .forms import InterestForm
+from auth.forms import RegisterForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse, Http404
 from .models import Topic
+
+
+def include_auth(context):
+    context.update({
+        'login_form': AuthenticationForm(),
+        'register_form': RegisterForm()
+    })
+    return context
 
 
 class IndexView(View):
@@ -15,6 +25,7 @@ class LandingView(View):
         context = {
             'form': InterestForm()
         }
+        context = include_auth(context)
         return render(request, 'landing.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -37,4 +48,5 @@ class TopicView(View):
         except Topic.DoesNotExist:
             return Http404()
         context['topic'] = topic
+        context = include_auth(context)
         return render(request, 'topic.html', context)
