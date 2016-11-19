@@ -52,6 +52,11 @@
     padding: 20px 0 0 0;
 }
 
+.opinions {
+    padding: 0;
+    background: darkgrey;
+}
+
 .opinion-card {
     padding: 30px !important;
 }

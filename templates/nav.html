@@ -5,27 +5,27 @@
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="{% url 'topic' 1 %}">Topic</a></li>
             <li><a href="{% url 'landing' %}">Interest</a></li>
-            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=True %}>
+            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=False %}>
                 <a href="#login-modal">Login</a>
             </li>
-            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=True %}>
+            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=False %}>
                 <a href="#register-modal">Register</a>
             </li>
-            <li class="logged-in" {% include 'auth_toggle.html' with logged_in=False %}>
-                <a id="logout-button1" href="#">Logout</a>
+            <li class="logged-in" {% include 'auth_toggle.html' with logged_in=True %}>
+                <a class="logout-button" href="#">Logout</a>
             </li>
         </ul>
         <ul id="mobile-demo" class="side-nav">
             <li><a href="{% url 'topic' 1 %}">Topic</a></li>
             <li><a href="{% url 'landing' %}">Interest</a></li>
-            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=True %}>
+            <li class="logged-out" {% include 'auth_toggle.html' with logged_out=False %}>
                 <a href="#login-modal">Login</a>
             </li>
-            <li class="logged-out" {% include 'auth_toggle.html' with logged_in=True %}>
+            <li class="logged-out" {% include 'auth_toggle.html' with logged_out=False %}>
                 <a href="#register-modal">Register</a>
             </li>
-            <li class="logged-in" {% include 'auth_toggle.html' with logged_in=False %}>
-                <a id="logout-button2" href="#">Logout</a>
+            <li class="logged-in" {% include 'auth_toggle.html' with logged_in=True %}>
+                <a class="logout-button" href="#">Logout</a>
             </li>
         </ul>
     </div>

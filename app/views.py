@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from django.views import View
-from .forms import InterestForm
-from auth.forms import RegisterForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse, Http404
+from django.shortcuts import render
+from django.views import View
+
+from auth.forms import RegisterForm
+from .forms import InterestForm, OpinionForm
 from .models import Topic
 
 
@@ -41,7 +42,9 @@ class LandingView(View):
 
 class TopicView(View):
     def get(self, request, *args, **kwargs):
-        context = {}
+        context = {
+            'form': OpinionForm()
+        }
         topic_id = kwargs['topic_id']
         try:
             topic = Topic.objects.get(id=topic_id)
@@ -50,3 +53,16 @@ class TopicView(View):
         context['topic'] = topic
         context = include_auth(context)
         return render(request, 'topic.html', context)
+
+
+class OpinionView(View):
+    def post(self, request, *args, **kwargs):
+        context = {}
+        form = OpinionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            context['success'] = True
+        else:
+            context['errors'] = form.errors
+
+        return JsonResponse(context)
