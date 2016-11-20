@@ -22,14 +22,17 @@
     {% include 'about.html' %}
 {% endblock %}
 {% block modal %}
-    {% include 'modal.html' %}
+    {% include 'modal.html' with mode='login' mode_cap='Login' csrf=csrf_token %}
+    {% include 'modal.html' with mode='register' mode_cap='Register' csrf=csrf_token %}
 {% endblock %}
 {% block bodies %}
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+    {% include 'scripts.html' %}
     {% include 'ga.html' %}
     {% include 'about_script.html' %}
-    {% include 'modal_script.html' %}
+    {% include 'modal_script.html' with mode='login' %}
+    {% include 'modal_script.html' with mode='register' %}
 {% endblock %}
 {% block extra_bodies %}{% endblock %}
 </body>

@@ -31,7 +31,7 @@ def make_topic():
 def seed(n=1):
     for i in range(n):
         topic = make_topic()
-        for j in range(random.randint(2, 3)):
+        for j in range(2):
             side = make_side(topic)
             for k in range(random.randint(5, 100)):
                 make_opinion(side)

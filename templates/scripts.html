@@ -1,0 +1,99 @@
+<script>
+    $(".button-collapse").sideNav();
+    {% if request.user.is_authenticated %}
+        window.user_id = {{ request.user.id }};
+    {% endif %}
+    $('.logout-button').click(function (event) {
+        window.logout(event)
+    });
+    var logged_out_navs = $('.logged-out');
+    var logged_in_navs = $('.logged-in');
+    window.logout = function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: '{% url 'logout' %}',
+            data: {},
+            type: "post",
+            success: function () {
+                window.logged_out()
+            }
+        });
+    };
+    window.logged_in = function () {
+        logged_in_navs.each(function () {
+            $(this).show();
+        });
+        logged_out_navs.each(function () {
+            $(this).hide();
+        })
+    };
+    window.logged_out = function () {
+        logged_in_navs.each(function () {
+            $(this).hide();
+        });
+        logged_out_navs.each(function () {
+            $(this).show();
+        })
+    };
+    window.error_message = function (form, message) {
+        var message_container = form.find('.message-container');
+        message_container.show();
+        var message_card = message_container.find('.card-panel');
+        message_card.css('border', '1px solid #F44336');
+        message_card.css('color', '#F44336');
+        var message_ele = message_card.find('.message-ele');
+        message_ele.html('<p>' + message + '</p>');
+    };
+    window.success_message = function (form, message) {
+        message = message || 'Unexpected server error!';
+        var message_container = form.find('.message-container');
+        message_container.show();
+
+        var message_card = message_container.find('.card-panel');
+        message_card.css('border', '1px solid #4CAF50');
+        message_card.css('color', 'rgba(0,0,0,0.87)');
+
+        var message_ele = message_card.find('.message-ele');
+        message_ele.html('<p>' + message + '</p>');
+    };
+    window.apply_errors = function (response, form_name) {
+        var error;
+        for (error in response['errors']) {
+            var field = $('#' + form_name + '-' + error);
+            var label = $('label[for="' + field.attr('id') + '"]');
+            var error_message = response['errors'][error];
+            label.attr('data-error', error_message);
+            field.addClass('invalid');
+        }
+    };
+    window.hide_message_container = function (form) {
+        var message_container = form.find('.message-container');
+        message_container.hide();
+    };
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        }
+    });
+</script>

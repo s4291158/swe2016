@@ -1,0 +1,9 @@
+{% if logged_in %}
+    {% if request.user.is_authenticated %}{% else %}
+        style="display: none"
+    {% endif %}
+{% else %}
+    {% if request.user.is_authenticated %}
+        style="display: none"
+    {% endif %}
+{% endif %}
